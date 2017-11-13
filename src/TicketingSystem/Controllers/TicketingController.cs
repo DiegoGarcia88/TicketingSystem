@@ -3,34 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using TicketingSystem.Models;
 
 namespace TicketingSystem.Controllers
 {
     public class TicketingController : Controller
     {
-        public void Register()
+        
+        public ActionResult Index()
         {
-
+            return View();
         }
-        public void Login()
+        public ActionResult Register()
         {
-
+            return View();
         }
-
-        public void DashBoard()
+        public ActionResult Login()
         {
-
-        }
-
-        public void Create()
-        {
-
+            return View();
         }
 
-        public void Edit()
+        public ActionResult DashBoard()
         {
+            return View();
+        }
 
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        public ActionResult Edit()
+        {
+            return View();
         }
     }
 }
