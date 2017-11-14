@@ -24,7 +24,7 @@ namespace TicketingSystem.Data
             };
         }
 
-        public User GetUser(string email)
+        public static User GetUser(string email)
         {
             User u = null;
             foreach (var user in _users)
@@ -36,6 +36,11 @@ namespace TicketingSystem.Data
                 }
             }
             return u;
+        }
+
+        public static List<User> GetUsers()
+        {
+            return _users;
         }
     }
 }

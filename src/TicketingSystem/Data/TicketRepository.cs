@@ -17,14 +17,14 @@ namespace TicketingSystem.Data
 
         private static void LoadData()
         {
-            var tickets = new List<Ticket>()
+            _tickets = new List<Ticket>()
             {
-                //new Ticket("ticket 1","this is the first ticket that was ever created, and the most important one",,),
+                new Ticket("ticket 1","this is the first ticket that was ever created, and the most important one",UserRepository.GetUser("diego@test.com"),UserRepository.GetUser("diego@test.com"))
             };
             
         }
 
-        public Ticket GetTicket(int id)
+        public static Ticket GetTicket(int id)
         {
             Ticket t = null;
             foreach (var ticket in _tickets)
@@ -37,5 +37,11 @@ namespace TicketingSystem.Data
             }
             return t;
         }
+
+        public static List<Ticket> GetTickets()
+        {
+            return _tickets;
+        }
+
     }
 }

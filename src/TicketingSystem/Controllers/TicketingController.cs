@@ -10,23 +10,25 @@ namespace TicketingSystem.Controllers
 {
     public class TicketingController : Controller
     {
-        private UserRepository _users = null;
-        private TicketRepository _tickets = null;
+        private UserRepository _userRepo = null;
+        private TicketRepository _ticketRepo = null;
 
         public TicketingController()
         {
-            _users = new UserRepository();
-            _tickets = new TicketRepository();
+            _userRepo = new UserRepository();
+            _ticketRepo = new TicketRepository();
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
         public ActionResult Register()
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult Register(string name, string email, string password)
+        {
+            return View();
+        }
+
         public ActionResult Login()
         {
             
@@ -34,27 +36,39 @@ namespace TicketingSystem.Controllers
         }
         
         [HttpPost]
-        public ActionResult Login(string user, string password)
+        public ActionResult Login(string email, string password)
         {
-            if (user == "Diego" && password == "1234")
+            if (ValidateCredentials(email, password))
             {
-                
+                return View("DashBoard", TicketRepository.GetTickets());
             }
             else
             {
-                
+                return View();
             }
-            return View();
+            
+        }
+
+        private bool ValidateCredentials(string email, string password)
+        {
+            bool validate = false;
+            List<User> users = UserRepository.GetUsers();
+            foreach (var user in users)
+            {
+                if (email == user.Email && password == user.Password)
+                {
+                    validate = true;
+                    Session["userEmail"] = email;
+                    break;
+                }
+            }
+
+            return validate;
         }
 
         public ActionResult DashBoard(string email)
         {
-            //Cambiar email por variable de session email una vez implementado el login
-            //var user = _users.GetUser(email);
-            //ViewBag.Name = user.Name;
-            //ViewBag.Email = user.Email;
-            //return View(_tickets);
-            return View();
+            return View(TicketRepository.GetTickets());
             
         }
 
@@ -69,7 +83,7 @@ namespace TicketingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            var ticket = _tickets.GetTicket((int)id);
+            var ticket = TicketRepository.GetTicket((int)id);
             return View(ticket);
         }
 
@@ -79,7 +93,7 @@ namespace TicketingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            var ticket = _tickets.GetTicket((int)id);
+            var ticket = TicketRepository.GetTicket((int)id);
             return View(ticket);
         }
 

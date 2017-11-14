@@ -114,7 +114,6 @@
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
-    <Content Include="Views\Ticketing\Index.cshtml" />
     <Content Include="Views\Ticketing\Login.cshtml" />
     <Content Include="Views\Ticketing\Register.cshtml" />
     <Content Include="Views\Ticketing\DashBoard.cshtml" />
