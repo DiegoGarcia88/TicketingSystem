@@ -19,7 +19,7 @@ namespace TicketingSystem.Data
         {
             var tickets = new List<Ticket>()
             {
-                new Ticket("ticket 1","this is the first ticket that was ever created, and the most important one",,),
+                //new Ticket("ticket 1","this is the first ticket that was ever created, and the most important one",,),
             };
             
         }

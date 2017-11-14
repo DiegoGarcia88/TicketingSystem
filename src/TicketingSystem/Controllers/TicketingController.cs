@@ -29,16 +29,33 @@ namespace TicketingSystem.Controllers
         }
         public ActionResult Login()
         {
+            
+            return View();
+        }
+        
+        [HttpPost]
+        public ActionResult Login(string user, string password)
+        {
+            if (user == "Diego" && password == "1234")
+            {
+                
+            }
+            else
+            {
+                
+            }
             return View();
         }
 
         public ActionResult DashBoard(string email)
         {
             //Cambiar email por variable de session email una vez implementado el login
-            var user = _users.GetUser(email);
-            ViewBag.Name = user.Name;
-            ViewBag.Email = user.Email;
-            return View(_tickets);
+            //var user = _users.GetUser(email);
+            //ViewBag.Name = user.Name;
+            //ViewBag.Email = user.Email;
+            //return View(_tickets);
+            return View();
+            
         }
 
         public ActionResult Create()
