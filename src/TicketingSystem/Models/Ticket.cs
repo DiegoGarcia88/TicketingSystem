@@ -8,6 +8,7 @@ namespace TicketingSystem.Models
     public class Ticket
     {
 
+        private static int id = 0;
         public enum EnumStatus
         {
             Open,
@@ -16,12 +17,14 @@ namespace TicketingSystem.Models
         public string Title { get; set; }
         public string Body { get; set; }
         public EnumStatus Status { get; set; }
-        public User Author { get; set; }
+        public User Author { get; }
         public User Assignee { get; set; }
-        public DateTime Created { get; set; }
-
+        public DateTime Created { get; }
+        public int Id { get; }
         public Ticket(string title,string body, User author, User assignee)
         {
+            id++;
+            Id = id;
             Title = title;
             Body = body;
             Status = EnumStatus.Open;
