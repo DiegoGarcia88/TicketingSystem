@@ -17,10 +17,10 @@ namespace TicketingSystem.Models
         public string Title { get; set; }
         public string Body { get; set; }
         public EnumStatus Status { get; set; }
-        public User Author { get; }
+        public User Author { get; set; }
         public User Assignee { get; set; }
-        public DateTime Created { get; }
-        public int Id { get; }
+        public DateTime Created { get; set; }
+        public int Id { get; set; }
         public Ticket(string title,string body, User author, User assignee)
         {
             id++;
@@ -31,6 +31,11 @@ namespace TicketingSystem.Models
             Author = author;
             Assignee = assignee;
             Created = DateTime.Now;
+        }
+
+        public Ticket()
+        {
+
         }
     }
 }

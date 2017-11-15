@@ -19,7 +19,8 @@ namespace TicketingSystem.Data
         {
             _tickets = new List<Ticket>()
             {
-                new Ticket("ticket 1","this is the first ticket that was ever created, and the most important one",UserRepository.GetUser("diego@test.com"),UserRepository.GetUser("diego@test.com"))
+                new Ticket("ticket 1","first ticket",UserRepository.GetUser("diego@test.com"),UserRepository.GetUser("diego@test.com")),
+                new Ticket("ticket 2","second ticket",UserRepository.GetUser("prueba@test.com"),UserRepository.GetUser("prueba@test.com"))
             };
             
         }

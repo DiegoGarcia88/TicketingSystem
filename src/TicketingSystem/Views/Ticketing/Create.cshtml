@@ -21,18 +21,15 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Created, new { @class = "control-label" })
-        @Html.TextBoxFor(m => m.Created,"{0:d}", new { @class = "form-control" })
-        <!--date readonly and self by def-->
+        @Html.TextBoxFor(m => m.Created,"{0:d}", new { @readonly = true, @class = "form-control" })
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Author, new { @class = "control-label" })
-        @Html.TextBoxFor(m => m.Author.Name, null, new { @class = "form-control" })
-        <!--author read only and self-->
+        @Html.TextBoxFor(m => m.Author.Name, null, new { @readonly = true, @class = "form-control" })
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Assignee, new { @class = "control-label" })
-        @Html.TextBoxFor(m => m.Assignee.Name, null, new { @class = "form-control" })
-        <!--assignee, changable on list and self by def-->
+        @Html.DropDownListFor(m => m.Assignee.Name,(SelectList)ViewBag.UserList, new { @class = "form-control" })
     </div>
     <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-save"> Save</span></button>
     <a href="@Url.Action("DashBoard")" class="btn btn-danger">

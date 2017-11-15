@@ -12,18 +12,24 @@ namespace TicketingSystem.Controllers
     {
         public ActionResult Register()
         {
-            User u = new User("", "", "");
+            User u = new User();
             return View(u);
         }
         [HttpPost]
         public ActionResult Register(User user)
         {
-            if (UserRepository.AddUser(user))
+            if (ModelState.IsValid)
             {
-                //poner mensaje de success
-                return RedirectToAction("DashBoard");                
+                if (UserRepository.AddUser(user))
+                {
+                    //poner mensaje de success
+                    UserLogin(user.Email, user.Password);
+                    return RedirectToAction("DashBoard");
+                }
+                //Poner mensaje de error usuario ya existe
+                return View();
             }
-            //poner mensaje de error
+            
             return View();
         }
 
@@ -36,9 +42,8 @@ namespace TicketingSystem.Controllers
         [HttpPost]
         public ActionResult Login(string email, string password)
         {
-            if (ValidateCredentials(email, password))
+            if (UserLogin(email, password))
             {
-                Session["userEmail"] = email;
                 return View("DashBoard", TicketRepository.GetTickets());
             }
             else
@@ -46,6 +51,19 @@ namespace TicketingSystem.Controllers
                 return View();
             }
             
+        }
+        //Method to log the user into the system
+        private bool UserLogin(string email, string password)
+        {
+            if (ValidateCredentials(email, password))
+            {
+                Session["userEmail"] = email;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private bool ValidateCredentials(string email, string password)
@@ -76,6 +94,7 @@ namespace TicketingSystem.Controllers
             {
                 User u = UserRepository.GetUser(Session["userEmail"].ToString());
                 var ticket = new Ticket("", "", u, u);
+                SetupUserSelectList();
                 return View(ticket);
             }
             catch (NullReferenceException)
@@ -92,10 +111,15 @@ namespace TicketingSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                TicketRepository.AddTicket(ticket);
+                if (TicketRepository.AddTicket(ticket))
+                {
+                    //mensaje de exito
+                    return RedirectToAction("DashBoard");
+                }
             }
+            SetupUserSelectList();
+            return View();
             
-            return RedirectToAction("DashBoard");
         }
 
         public ActionResult Edit(int? id)
@@ -118,6 +142,9 @@ namespace TicketingSystem.Controllers
             return View(ticket);
         }
 
-         
+         private void SetupUserSelectList()
+        {
+            ViewBag.UserList = new SelectList(UserRepository.GetUsers(),"Email","Name");
+        }
     }
 }
