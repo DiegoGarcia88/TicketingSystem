@@ -26,6 +26,12 @@ namespace TicketingSystem.Controllers
         [HttpPost]
         public ActionResult Register(string name, string email, string password)
         {
+            if (UserRepository.AddUser(name, email, password))
+            {
+                //poner mensaje de success
+                return View("DashBoard",UserRepository.GetUser(email));
+            }
+            //poner mensaje de error
             return View();
         }
 

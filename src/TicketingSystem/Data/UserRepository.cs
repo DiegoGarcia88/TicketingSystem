@@ -19,8 +19,8 @@ namespace TicketingSystem.Data
         {
             _users = new List<User>()
             {
-                new User("diego@test.com","Abcd1234","Diego"),
-                new User("prueba@test.com","Password","Usuario")
+                new User("Diego","diego@test.com","Abcd1234"),
+                new User("Usuario","prueba@test.com","Password")
             };
         }
 
@@ -41,6 +41,45 @@ namespace TicketingSystem.Data
         public static List<User> GetUsers()
         {
             return _users;
+        }
+
+        //Verify if the user exists
+        public static bool UserExists(string email)
+        {
+            bool exists = false;
+            foreach (var user in _users)
+            {
+                if (email == user.Email)
+                {
+                    exists = true;
+                    return exists;
+                }
+            }
+
+            return exists;
+        }
+        //Adds user to the repository if it doesn't already exist
+        public static bool AddUser(string name, string email, string password)
+        {
+            bool added = false;
+            if (!UserExists(email) && VerifyInputData(name,email,password))
+            {
+                User u = new User(name,email,password);
+                _users.Add(u);
+                added = true;
+            }
+            return added;
+        }
+
+        //Final check to make sure we don't create a user with empty data
+        public static bool VerifyInputData(string name,string email, string password)
+        {
+            bool validate = false;
+            if (name != "" && email != "" && password != "")
+            {
+                validate = true;
+            }
+            return validate;
         }
     }
 }

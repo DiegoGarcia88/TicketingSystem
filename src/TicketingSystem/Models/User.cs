@@ -11,7 +11,7 @@ namespace TicketingSystem.Models
         public string Password { get;}
         public string Name { get;}
 
-        public User(string email, string password, string name)
+        public User(string name, string email, string password)
         {
             Email = email;
             Password = password;
