@@ -22,17 +22,17 @@
             <td>@ticket.Status</td>
             <td>@ticket.Author.Name</td>
             <td>@ticket.Assignee.Name</td>
+            <td><span class="hidden-xs">@ticket.Created.ToString("MM/dd/yyyy")</span></td>
             <td>
                 <div class="pull-right">
-                    <a href="@Url.Action("Edit", new { id = ticket.Id })" class="btn btn-warning btn-sm margin-right">
-                        <span class="glyphicon glyphicon-edit"></span><span class="hidden-xs"> Edit</span>
+                    <a href="@Url.Action("Edit", new { id = ticket.Id })" class="btn btn-success btn-sm margin-right">
+                        <span class="glyphicon glyphicon-edit"></span><span> Edit</span>
                     </a>
                     <a href="@Url.Action("Delete", new { id = ticket.Id })" class="btn btn-danger btn-sm">
-                        <span class="glyphicon glyphicon-trash"></span><span class="hidden-xs"> Delete</span>
+                        <span class="glyphicon glyphicon-trash"></span><span> Delete</span>
                     </a>
                 </div>
             </td>
-            <td><span class="hidden-xs">@ticket.Created.ToString("MM/dd/yyyy")</span></td>
         </tr>
     }
 </table>

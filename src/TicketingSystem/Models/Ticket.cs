@@ -28,7 +28,7 @@ namespace TicketingSystem.Models
             Title = title;
             Body = body;
             Status = EnumStatus.Open;
-            Author = Author;
+            Author = author;
             Assignee = assignee;
             Created = DateTime.Now;
         }

@@ -4,6 +4,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
+            <img src="https://d2wlcd8my7k9h4.cloudfront.net/static/co/img/brand-guidelines/download/sophilabs-wordmark.svg" alt="sophilabs" class="img-responsive" />            
+        </div>
+        <div class="col-md-6">
             <form method="post">
                 <div class="form-group">
                     <label for="email">Email:</label>
@@ -14,12 +17,8 @@
                     <input type="password" class="form-control" id="password" name="password">
                 </div>
                 <button type="submit" class="btn btn-default">Login</button>
+                @Html.ActionLink("Register", "Register", null, new { @class = "btn btn-default" })
             </form>
-        </div>
-        <div class="col-md-6">
-            <img src="https://d2wlcd8my7k9h4.cloudfront.net/static/co/img/brand-guidelines/download/sophilabs-wordmark.svg" alt="sophilabs" class="img-responsive" />
-            @Html.ActionLink("Register", "Register", null, new { @class = "btn btn-default" })
-            
         </div>        
     </div>
 </div>

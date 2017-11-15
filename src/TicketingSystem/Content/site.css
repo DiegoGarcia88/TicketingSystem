@@ -1,35 +1,20 @@
 ﻿body {
-    padding-top: 50px;
     padding-bottom: 20px;
 }
 
 
 .body-content {
+    padding-top:100px;
     padding-left: 15px;
     padding-right: 15px;
 }
 
-.navbar 
+footer 
 {
-    background-color: rgb(24,34,36) !important;
-    border: none !important;
-}
-
-.navbar-brand 
-{
-    color: white !important;
-}
-
-.navbar-brand:hover
-{
-    color: rgb(255,67,58) !important;
+    padding: 0 10px;
 }
 
 .btn 
 {
-    background-color: white !important;
-    border: 2px solid rgb(255,67,58) !important;
-    
+    margin: 10px auto !important;
 }
-
-
