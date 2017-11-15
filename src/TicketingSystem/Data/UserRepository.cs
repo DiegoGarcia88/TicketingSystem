@@ -59,12 +59,11 @@ namespace TicketingSystem.Data
             return exists;
         }
         //Adds user to the repository if it doesn't already exist
-        public static bool AddUser(string name, string email, string password)
+        public static bool AddUser(User u)
         {
             bool added = false;
-            if (!UserExists(email) && VerifyInputData(name,email,password))
+            if (!UserExists(u.Email) && VerifyInputData(u.Name,u.Email,u.Password))
             {
-                User u = new User(name,email,password);
                 _users.Add(u);
                 added = true;
             }

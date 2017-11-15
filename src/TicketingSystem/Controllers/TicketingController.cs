@@ -10,26 +10,18 @@ namespace TicketingSystem.Controllers
 {
     public class TicketingController : Controller
     {
-        private UserRepository _userRepo = null;
-        private TicketRepository _ticketRepo = null;
-
-        public TicketingController()
-        {
-            _userRepo = new UserRepository();
-            _ticketRepo = new TicketRepository();
-        }
-
         public ActionResult Register()
         {
-            return View();
+            User u = new User("", "", "");
+            return View(u);
         }
         [HttpPost]
-        public ActionResult Register(string name, string email, string password)
+        public ActionResult Register(User user)
         {
-            if (UserRepository.AddUser(name, email, password))
+            if (UserRepository.AddUser(user))
             {
                 //poner mensaje de success
-                return View("DashBoard",UserRepository.GetUser(email));
+                return RedirectToAction("DashBoard");                
             }
             //poner mensaje de error
             return View();
@@ -46,6 +38,7 @@ namespace TicketingSystem.Controllers
         {
             if (ValidateCredentials(email, password))
             {
+                Session["userEmail"] = email;
                 return View("DashBoard", TicketRepository.GetTickets());
             }
             else
@@ -64,7 +57,6 @@ namespace TicketingSystem.Controllers
                 if (email == user.Email && password == user.Password)
                 {
                     validate = true;
-                    Session["userEmail"] = email;
                     break;
                 }
             }
@@ -80,7 +72,30 @@ namespace TicketingSystem.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            try
+            {
+                User u = UserRepository.GetUser(Session["userEmail"].ToString());
+                var ticket = new Ticket("", "", u, u);
+                return View(ticket);
+            }
+            catch (NullReferenceException)
+            {
+                return RedirectToAction("Login");
+            }
+            
+        }
+
+        //ver como hacer para entre el submit y ahora que se tomen los string de author y assignee
+        //como users y no como strings
+        [HttpPost]
+        public ActionResult Create(Ticket ticket)
+        {
+            if (ModelState.IsValid)
+            {
+                TicketRepository.AddTicket(ticket);
+            }
+            
+            return RedirectToAction("DashBoard");
         }
 
         public ActionResult Edit(int? id)

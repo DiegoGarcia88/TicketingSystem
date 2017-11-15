@@ -43,5 +43,10 @@ namespace TicketingSystem.Data
             return _tickets;
         }
 
+        public static bool AddTicket(Ticket ticket)
+        {
+            _tickets.Add(ticket);
+            return true;
+        }
     }
 }
