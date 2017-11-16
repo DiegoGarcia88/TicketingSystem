@@ -109,6 +109,10 @@ namespace TicketingSystem.Controllers
         [HttpPost]
         public ActionResult Create(string title,string body,int status,string assignee)
         {
+            if (title == "" || body == "")
+            {
+                return View();
+            }
             //Assignee is passed as string for both security and simplicity
             if (ModelState.IsValid)
             {
@@ -129,7 +133,7 @@ namespace TicketingSystem.Controllers
             return View();
             
         }
-
+        
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -155,5 +159,7 @@ namespace TicketingSystem.Controllers
             
             ViewBag.UserList = new SelectList(UserRepository.GetUsers(),"Email","Name");
         }
+
+        
     }
 }

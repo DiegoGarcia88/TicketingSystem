@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TicketingSystem.Models
 {
@@ -12,7 +13,11 @@ namespace TicketingSystem.Models
             Open,
             Closed
         }
+        [Required(ErrorMessage ="Title is Required")]
+        [MinLength(1, ErrorMessage = "Title is too short")]
         public string Title { get; set; }
+        [Required(ErrorMessage = "Body is Required")]
+        [MinLength(1, ErrorMessage = "Body is too short")]
         public string Body { get; set; }
         public EnumStatus Status { get; set; }
         public User Author { get; set; }
