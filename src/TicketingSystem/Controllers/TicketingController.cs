@@ -92,8 +92,10 @@ namespace TicketingSystem.Controllers
         {
             try
             {
-                User u = UserRepository.GetUser(Session["userEmail"].ToString());
-                var ticket = new Ticket("", "", u, u);
+                User tempUser = UserRepository.GetUser(Session["userEmail"].ToString());
+                //We remove password from the user before passing it to the view
+                User user = new User(tempUser.Name,tempUser.Email,"");
+                var ticket = new Ticket(user, user);
                 SetupUserSelectList();
                 return View(ticket);
             }
@@ -104,18 +106,24 @@ namespace TicketingSystem.Controllers
             
         }
 
-        //ver como hacer para entre el submit y ahora que se tomen los string de author y assignee
-        //como users y no como strings
         [HttpPost]
-        public ActionResult Create(Ticket ticket)
+        public ActionResult Create(string title,string body,int status,string assignee)
         {
+            //Assignee is passed as string for both security and simplicity
             if (ModelState.IsValid)
             {
-                if (TicketRepository.AddTicket(ticket))
+                User auth = UserRepository.GetUser(Session["userEmail"].ToString());
+                User assign = UserRepository.GetUser(assignee);
+                if (auth != null && assign != null)
                 {
-                    //mensaje de exito
-                    return RedirectToAction("DashBoard");
+                    Ticket ticket = new Ticket(title, body, status, auth, assign);
+                    if (TicketRepository.AddTicket(ticket))
+                    {
+                        //mensaje de exito
+                        return RedirectToAction("DashBoard");
+                    }
                 }
+                
             }
             SetupUserSelectList();
             return View();
@@ -144,6 +152,7 @@ namespace TicketingSystem.Controllers
 
          private void SetupUserSelectList()
         {
+            
             ViewBag.UserList = new SelectList(UserRepository.GetUsers(),"Email","Name");
         }
     }

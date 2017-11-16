@@ -19,8 +19,9 @@ namespace TicketingSystem.Data
         {
             _tickets = new List<Ticket>()
             {
-                new Ticket("ticket 1","first ticket",UserRepository.GetUser("diego@test.com"),UserRepository.GetUser("diego@test.com")),
-                new Ticket("ticket 2","second ticket",UserRepository.GetUser("prueba@test.com"),UserRepository.GetUser("prueba@test.com"))
+                new Ticket("ticket 1","first ticket",0,UserRepository.GetUser("diego@test.com"),UserRepository.GetUser("diego@test.com")),
+                new Ticket("ticket 2","second ticket",0,UserRepository.GetUser("prueba@test.com"),UserRepository.GetUser("prueba@test.com"))
+                
             };
             
         }
@@ -49,5 +50,6 @@ namespace TicketingSystem.Data
             _tickets.Add(ticket);
             return true;
         }
+        
     }
 }

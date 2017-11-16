@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace TicketingSystem.Models
 {
+    
     public class Ticket
     {
 
@@ -21,21 +19,27 @@ namespace TicketingSystem.Models
         public User Assignee { get; set; }
         public DateTime Created { get; set; }
         public int Id { get; set; }
-        public Ticket(string title,string body, User author, User assignee)
+        public Ticket(string title,string body, int status, User author, User assignee)
         {
             id++;
             Id = id;
             Title = title;
             Body = body;
-            Status = EnumStatus.Open;
+            Status = (EnumStatus)status;
+            Created = DateTime.Now;
             Author = author;
             Assignee = assignee;
-            Created = DateTime.Now;
+                        
         }
 
-        public Ticket()
+        //For temporary tickets, doesn't increase the ID and doesn't populate unnecessary fields
+        public Ticket(User author, User assignee)
         {
-
+            Created = DateTime.Now;
+            Author = author;
+            Assignee = assignee;
         }
+
+
     }
 }

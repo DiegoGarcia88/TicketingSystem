@@ -14,6 +14,7 @@ namespace TicketingSystem.Models
         public User(string name, string email, string password)
         {
             Email = email;
+            //Passwords are stored in plain text due to time constraints, will be changing it later
             Password = password;
             Name = name;
         }
