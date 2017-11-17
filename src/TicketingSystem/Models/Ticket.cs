@@ -44,7 +44,7 @@ namespace TicketingSystem.Models
             Author = author;
             Assignee = assignee;
         }
-
+        /*
         public override bool Equals(Object obj)
         {
             Ticket that = obj as Ticket;
@@ -61,8 +61,8 @@ namespace TicketingSystem.Models
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode() + Title.GetHashCode() + Created.GetHashCode() + Author.GetHashCode();
+            return Id.GetHashCode() + Title.GetHashCode();
         }
-
+        */
     }
 }

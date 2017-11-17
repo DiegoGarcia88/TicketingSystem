@@ -131,8 +131,9 @@ namespace TicketingSystem.Controllers
         [HttpPost]
         public ActionResult Create(string title,string body,int status,string assignee)
         {
-            if (title == "" || body == "")
+            if (String.IsNullOrWhiteSpace(title) || String.IsNullOrWhiteSpace(body))
             {
+                //TODO: Log and display, title and body cannot be empty
                 return View();
             }
             //Assignee is passed as string for both security and simplicity
@@ -172,17 +173,22 @@ namespace TicketingSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Ticket ticket)
+        public ActionResult Edit(int id, string title, string body, int status, string assignee)
         {
             if (ModelState.IsValid)
             {
-                TicketRepository.UpdateTicket(ticket);
+                User assign = UserRepository.GetUser(assignee);
+                if (assign != null)
+                {
+                    TicketRepository.UpdateTicket(id, title, body, status, assign);
+                }
+                
                 
                 return RedirectToAction("DashBoard");
             }
 
             SetupUserSelectList();
-            return View(ticket);
+            return View(id);
         }
 
 

@@ -59,17 +59,14 @@ namespace TicketingSystem.Data
         }
 
 
-        public static void UpdateTicket(Ticket ticket)
+        public static void UpdateTicket(int id,string title, string body, int status, User assignee)
         {
-            foreach (var t in _tickets)
+            foreach (var t in _tickets.Where(x => x.Id == id))
             {
-                if (ticket == t)
-                {
-                    t.Title = ticket.Title;
-                    t.Body = ticket.Body;
-                    t.Status = ticket.Status;
-                    t.Assignee = ticket.Assignee;
-                }
+                t.Title = title;
+                t.Body = body;
+                t.Status = (Ticket.EnumStatus)status;
+                t.Assignee = assignee;
             }
         }
 
