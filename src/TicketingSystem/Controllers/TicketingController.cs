@@ -146,7 +146,7 @@ namespace TicketingSystem.Controllers
                     Ticket ticket = new Ticket(title, body, status, auth, assign);
                     if (TicketRepository.AddTicket(ticket))
                     {
-                        //TODO: Success message
+                        TempData["Message"] = "Ticket Successfully Created!";
                         return RedirectToAction("DashBoard");
                     }
                 }
@@ -181,10 +181,12 @@ namespace TicketingSystem.Controllers
                 if (assign != null)
                 {
                     TicketRepository.UpdateTicket(id, title, body, status, assign);
+                    TempData["Message"] = "Ticket Successfully Updated!";
+                    return RedirectToAction("DashBoard");
                 }
                 
                 
-                return RedirectToAction("DashBoard");
+                
             }
 
             SetupUserSelectList();
@@ -213,7 +215,7 @@ namespace TicketingSystem.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             TicketRepository.DeleteTicket((int)id);
-            
+            TempData["Message"] = "Ticket was Deleted";
             return RedirectToAction("DashBoard");
         }
 
@@ -229,7 +231,6 @@ namespace TicketingSystem.Controllers
         //Filter lists by title and status
         private List<Ticket> FilterList(List<Ticket> list,string filterTitle,string status)
         {
-            //chequear en casa caso por los estados
             if (String.IsNullOrEmpty(filterTitle))
             {
                 return FilterStatus(list,status);
