@@ -75,16 +75,7 @@ namespace TicketingSystem.Data
 
         public static void DeleteTicket(int id)
         {
-            foreach (var t in _tickets)
-            {
-                if (id == t.Id)
-                {
-                    Ticket ticket = TicketRepository.GetTicket(id);
-                    _tickets.Remove(ticket);
-                    ticket = null;                    
-                }
-                
-            }
+            _tickets.RemoveAll(t => t.Id == id);            
         }
         
     }

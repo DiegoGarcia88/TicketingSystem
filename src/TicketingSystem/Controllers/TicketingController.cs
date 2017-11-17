@@ -12,6 +12,8 @@ namespace TicketingSystem.Controllers
 {
     public class TicketingController : Controller
     {
+
+        #region Action Methods
         public ActionResult Register()
         {
             User u = new User();
@@ -54,36 +56,7 @@ namespace TicketingSystem.Controllers
             }
             
         }
-        //Method to log the user into the system
-        private bool UserLogin(string email, string password)
-        {
-            if (ValidateCredentials(email, password))
-            {
-                Session["userEmail"] = email;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private bool ValidateCredentials(string email, string password)
-        {
-            bool validate = false;
-            List<User> users = UserRepository.GetUsers();
-            foreach (var user in users)
-            {
-                if (email == user.Email && password == user.Password)
-                {
-                    validate = true;
-                    break;
-                }
-            }
-
-            return validate;
-        }
-
+        
         public ActionResult DashBoard()
         {
             
@@ -172,7 +145,7 @@ namespace TicketingSystem.Controllers
                     Ticket ticket = new Ticket(title, body, status, auth, assign);
                     if (TicketRepository.AddTicket(ticket))
                     {
-                        //mensaje de exito
+                        //TODO: Success message
                         return RedirectToAction("DashBoard");
                     }
                 }
@@ -244,7 +217,9 @@ namespace TicketingSystem.Controllers
             ViewBag.UserList = new SelectList(UserRepository.GetUsers(),"Email","Name");
         }
 
+        #endregion
 
+        #region Auxiliary Functions
         //Filter lists by title and status
         private List<Ticket> FilterList(List<Ticket> list,string filterTitle,string status)
         {
@@ -280,5 +255,36 @@ namespace TicketingSystem.Controllers
                     return list;
             }
         }
+
+        //Method to log the user into the system
+        private bool UserLogin(string email, string password)
+        {
+            if (ValidateCredentials(email, password))
+            {
+                Session["userEmail"] = email;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool ValidateCredentials(string email, string password)
+        {
+            bool validate = false;
+            List<User> users = UserRepository.GetUsers();
+            foreach (var user in users)
+            {
+                if (email == user.Email && password == user.Password)
+                {
+                    validate = true;
+                    break;
+                }
+            }
+
+            return validate;
+        }
+        #endregion
     }
 }
