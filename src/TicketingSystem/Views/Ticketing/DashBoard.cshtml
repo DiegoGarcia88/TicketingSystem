@@ -4,6 +4,15 @@
     ViewBag.Title = "DashBoard";
 }
 
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        Filter by Title: @Html.TextBox("FilterTitle")
+        Filter by Status: @Html.DropDownList("Status",(SelectList)ViewBag.Statuses)
+        Show Tickets for All Users: @Html.CheckBox("AllUsers")
+        <input type="submit" value="Filter" />
+    </div>
+}
 
 <table class="table">
     <tr>

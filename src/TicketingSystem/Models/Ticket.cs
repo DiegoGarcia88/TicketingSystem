@@ -45,6 +45,24 @@ namespace TicketingSystem.Models
             Assignee = assignee;
         }
 
+        public override bool Equals(Object obj)
+        {
+            Ticket that = obj as Ticket;
+            if (that == null)
+            {
+                return false;
+            }
+            else
+            {
+                return this.Id == that.Id;
+            }
+
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode() + Title.GetHashCode() + Created.GetHashCode() + Author.GetHashCode();
+        }
 
     }
 }

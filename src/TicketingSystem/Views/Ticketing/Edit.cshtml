@@ -21,7 +21,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Created, new { @class = "control-label" })
-        @Html.TextBoxFor(m => m.Created, "{0:d}", new { @readonly = true, @class = "form-control" })
+        @Html.TextBoxFor(m => m.Created, "{0:d}", new {@disabled = true, @readonly = true, @class = "form-control" })
     </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Author, new { @class = "control-label" })

@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using TicketingSystem.Models;
 using TicketingSystem.Data;
+using System.Net;
+using System.Collections;
 
 namespace TicketingSystem.Controllers
 {
@@ -44,7 +46,7 @@ namespace TicketingSystem.Controllers
         {
             if (UserLogin(email, password))
             {
-                return View("DashBoard", TicketRepository.GetTickets());
+                return RedirectToAction("DashBoard");
             }
             else
             {
@@ -82,10 +84,57 @@ namespace TicketingSystem.Controllers
             return validate;
         }
 
-        public ActionResult DashBoard(string email)
+        public ActionResult DashBoard()
         {
-            return View(TicketRepository.GetTickets());
             
+            //Verify if the user is logged in, otherwise redirect him to login page
+            try
+            {
+                //We display only current user open tickets by default
+                User tempUser = UserRepository.GetUser(Session["userEmail"].ToString());
+                //Select all tickets for current user
+                List<Ticket> userTickets = TicketRepository.GetTickets().Where(t => t.Assignee == tempUser).ToList();
+                //Select All Open Tickets
+                List<Ticket> openTickets = TicketRepository.GetTickets().Where(t => t.Status == Ticket.EnumStatus.Open).ToList();
+                //Intersect Open tickets with user tickets for default dashboard
+                List<Ticket> ticketsToView = userTickets.Intersect(openTickets).ToList();
+                //Store status options for display in the filter
+                ViewBag.Statuses = new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Selected = true,Text = "Open", Value = "0"},
+                    new SelectListItem { Selected = false,Text = "Closed", Value = "1"},
+                    new SelectListItem { Selected = false,Text = "All", Value = "2"}
+                },"Value","Text");
+                return View(ticketsToView);
+            }
+            catch (NullReferenceException)
+            {
+                return RedirectToAction("Login");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DashBoard(string filterTitle, string status, bool allUsers)
+        {
+            //Store status options for display in the status filter
+            ViewBag.Statuses = new SelectList(new List<SelectListItem>
+                {
+                    new SelectListItem { Selected = true,Text = "Open", Value = "0"},
+                    new SelectListItem { Selected = false,Text = "Closed", Value = "1"},
+                    new SelectListItem { Selected = false,Text = "All", Value = "2"}
+                }, "Value", "Text");
+            //If all is selected, we show all tickets with no filters
+            if (allUsers)
+            {
+                return View(FilterList(TicketRepository.GetTickets(),filterTitle,status));
+            }
+            else
+            {
+                User tempUser = UserRepository.GetUser(Session["userEmail"].ToString());
+                //Select all tickets for current user
+                List<Ticket> userTickets = TicketRepository.GetTickets().Where(t => t.Assignee == tempUser).ToList();
+                return View(FilterList(userTickets, filterTitle,status));               
+            }            
         }
 
         public ActionResult Create()
@@ -138,28 +187,98 @@ namespace TicketingSystem.Controllers
         {
             if (id == null)
             {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Ticket ticket = TicketRepository.GetTicket((int)id);
+            if (ticket == null)
+            {
                 return HttpNotFound();
             }
-            var ticket = TicketRepository.GetTicket((int)id);
+            SetupUserSelectList();
             return View(ticket);
         }
+
+        [HttpPost]
+        public ActionResult Edit(Ticket ticket)
+        {
+            if (ModelState.IsValid)
+            {
+                TicketRepository.UpdateTicket(ticket);
+                
+                return RedirectToAction("DashBoard");
+            }
+
+            SetupUserSelectList();
+            return View(ticket);
+        }
+
 
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Ticket ticket = TicketRepository.GetTicket((int)id);
+            if (ticket == null)
+            {
                 return HttpNotFound();
             }
-            var ticket = TicketRepository.GetTicket((int)id);
             return View(ticket);
         }
+        [ActionName("Delete"),HttpPost]
+        public ActionResult DeletePost(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            TicketRepository.DeleteTicket((int)id);
+            
+            return RedirectToAction("DashBoard");
+        }
 
-         private void SetupUserSelectList()
+        private void SetupUserSelectList()
         {
             
             ViewBag.UserList = new SelectList(UserRepository.GetUsers(),"Email","Name");
         }
 
-        
+
+        //Filter lists by title and status
+        private List<Ticket> FilterList(List<Ticket> list,string filterTitle,string status)
+        {
+            //chequear en casa caso por los estados
+            if (String.IsNullOrEmpty(filterTitle))
+            {
+                return FilterStatus(list,status);
+            }
+            List<Ticket> returnList = new List<Ticket>();
+            if (!String.IsNullOrEmpty(filterTitle))
+            {
+                returnList = list.Where(s => s.Title.Contains(filterTitle)).ToList();
+            }
+            return FilterStatus(returnList, status);
+
+
+
+        }
+        //Returns only tickets matching status
+        private List<Ticket> FilterStatus(List<Ticket> list, string status)
+        {
+            switch (status)
+            {
+                case "0":
+                    //Select Open Tickets
+                    List<Ticket> openTickets = list.Where(t => t.Status == Ticket.EnumStatus.Open).ToList();
+                    return openTickets;
+                case "1":
+                    //Select Closed Tickets
+                    List<Ticket> closedTickets = list.Where(t => t.Status == Ticket.EnumStatus.Closed).ToList();
+                    return closedTickets;
+                default:
+                    return list;
+            }
+        }
     }
 }
