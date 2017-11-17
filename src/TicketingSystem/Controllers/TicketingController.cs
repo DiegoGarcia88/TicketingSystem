@@ -26,11 +26,11 @@ namespace TicketingSystem.Controllers
             {
                 if (UserRepository.AddUser(user))
                 {
-                    //poner mensaje de success
+                    TempData["Message"] = "User was Created Successfully";
                     UserLogin(user.Email, user.Password);
                     return RedirectToAction("DashBoard");
                 }
-                //Poner mensaje de error usuario ya existe
+                //TODO: Log Error for user already exists
                 return View();
             }
             
@@ -123,6 +123,7 @@ namespace TicketingSystem.Controllers
             }
             catch (NullReferenceException)
             {
+                //If user is not logged in we redirect them to login page
                 return RedirectToAction("Login");
             }
             
