@@ -30,7 +30,7 @@ namespace TicketingSystem.Controllers
                     UserLogin(user.Email, user.Password);
                     return RedirectToAction("DashBoard");
                 }
-                //TODO: Log Error for user already exists
+                TempData["Message"] = "User already exists";
                 return View();
             }
             
@@ -132,29 +132,40 @@ namespace TicketingSystem.Controllers
         [HttpPost]
         public ActionResult Create(string title,string body,int status,string assignee)
         {
-            if (String.IsNullOrWhiteSpace(title) || String.IsNullOrWhiteSpace(body))
+            if (String.IsNullOrWhiteSpace(title))
             {
-                //TODO: Log and display, title and body cannot be empty
-                return View();
+                ModelState.AddModelError("Title", "Title Can't be Empty");
             }
+            if (String.IsNullOrWhiteSpace(body))
+            {
+                ModelState.AddModelError("Body", "Body Can't be Empty");
+            }
+
             //Assignee is passed as string for both security and simplicity
+            User auth = UserRepository.GetUser(Session["userEmail"].ToString());
+            User assign = UserRepository.GetUser(assignee);
+            if (auth == null)
+            {
+                ModelState.AddModelError("", "Error Selecting Author");
+                auth = new User("Empty","Empty","Empty");
+            }
+            if (assign == null)
+            {
+                ModelState.AddModelError("", "Error Selecting Assignee");
+                assign = new User("Empty", "Empty", "Empty");
+            }
+            Ticket ticket = new Ticket(title, body, status, auth, assign);
             if (ModelState.IsValid)
             {
-                User auth = UserRepository.GetUser(Session["userEmail"].ToString());
-                User assign = UserRepository.GetUser(assignee);
-                if (auth != null && assign != null)
+                if (TicketRepository.AddTicket(ticket))
                 {
-                    Ticket ticket = new Ticket(title, body, status, auth, assign);
-                    if (TicketRepository.AddTicket(ticket))
-                    {
-                        TempData["Message"] = "Ticket Successfully Created!";
-                        return RedirectToAction("DashBoard");
-                    }
+                    TempData["Message"] = "Ticket Successfully Created!";
+                    return RedirectToAction("DashBoard");
                 }
-                
             }
+
             SetupUserSelectList();
-            return View();
+            return View(ticket);
             
         }
         

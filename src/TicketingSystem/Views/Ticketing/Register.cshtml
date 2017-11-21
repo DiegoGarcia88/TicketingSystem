@@ -3,8 +3,19 @@
     ViewBag.Title = "Register";
 }
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        @TempData["Message"]
+    </div>
+
+}
+
 @using (Html.BeginForm())
-{        
+{
     <legend>New User Registration</legend>
     <div class="form-group">
         @Html.LabelFor(m => m.Name, new { @class = "control-label" })
